@@ -5,7 +5,7 @@
 
 ## Prerequisites
 
-This tutorial assumes you have a working self-hosted instance of Firefly III that can be reached from the internet. If you haven't already, refer to their installation guide. I suggest [using Docker](https://docs.firefly-iii.org/how-to/firefly-iii/installation/docker/). Personal note, be careful about the password your try to input when creating the first account. It must be insanely long and I first thought something was wrong during the installation.
+This tutorial assumes you have a working self-hosted instance of Firefly III that can be reached from the internet. If you haven't already, refer to their installation guide. I suggest [using Docker](https://docs.firefly-iii.org/how-to/firefly-iii/installation/docker/). Personal note, be careful about the password your try to input when creating the first account. It must be very long and I first thought something was wrong during the installation.
 
 What you'll need:
 - Your API URL. The endpoint we will use consists of the URL + /api/v1/transactions. Thus, it must look something like: https://yourfireflyiiiurl.com/api/v1/transactions
@@ -35,13 +35,15 @@ This is the moment when you may want the automation to run only after a confirma
 
 ##  The API request
 
+### What a request looks like
+
 Let's have a look at an API transaction request to Firefly III
 
 <details>
   <summary>What it looks like</summary>
   
   ```
-  POST /api/v1/transactions HTTP/1.1  
+POST /api/v1/transactions HTTP/1.1  
 Host: your-firefly-url
 Content-Type: application/json
 Authorization: Bearer YOUR_ACCESS_TOKEN
@@ -67,6 +69,35 @@ Accept: application/json
 
 </details>
 
+### The body of the request
 
+We will first focus on the body of the request. What do 'fire_webhooks' and 'apply_rules' do? I don't know 🤷. 'error_if_duplicate_hash' allows you to block duplicate expenses. I think you can remove these voices if you want, but try at your own risk. 
 
-We will first focus on the body of the request.
+Let's create a dictionary (the first `{}` of the body) to build the body of the request. "Search Actions">Dictionary. For the first three entries, select Boolean and set the value you want. **Watch out for the transaction value**. It may look like you need a dictionary, but what you really need is an array. This is because the structure of the transactions value is not `"transaction": {}`, but rather `"transactions": [{}]`. The array is the same for the square brackets, the dictionary inside the array for the curly brackets. 
+
+Then, in the first item of the array you create a dictionary. [This](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/6.jpg?raw=true) is how the dictionary looks. Then, inside the transactions value, you must see [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/7.jpg?raw=true) after you created the first item(which, remember, must be a dictionary). It's important you read an unchangeable 'Item 1' on the left, because that means that the voice you used for the transactions value is an array. So, "Item 1" must be a dictionary, inside the dictionary every value must be text.
+
+- type: withdrawal
+- date: from the bottom bar select "Current Date". Then, click on "Current Date" and select "ISO 8601" as "Date Format." You can toggle "ISO 8601 Time" if you want(I recommend it).
+- amount: "Select variable">select 'formatted amount' or the name you have chosen for the manipulated string of the amount.
+- description: "Select variable"> select 'description' or whatever you named the text block containing the merchant value
+- source_id: 1 (this means that the money will be deducted from the first account you set up in Firefly III. You may want to change this value; to see what number you need, go to your dashboard>accounts>asset accounts>click on the account you want to take the money from and look at the number at the end of the URL)
+- destination: "Select variable"> select 'description' or whatever you named the text block containing the merchant value (or just don't use this value)
+- currency_code: EUR (of course, if you pay in US Dollars write USD etc.)
+- category_name: "Select variable"> select the variable you used to define the choice from the category list (in my case, "category")
+
+[This is how it should look like](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/8.jpg?raw=true) remember, all these entries must be text.
+
+### The headers of the request
+
+Let's now move to the creating the headers of the request and the request itself. "Search Actions">Get contents of URL. The url must of course be API endpoint: https://yourfireflyiiiurl.com/api/v1/transactions. Open the entry by tapping on the ">" button, change the method to POST. Tap on add new header three times. These must be the values.
+
+- Accept: application/json
+- Authorization: Bearer YOUR_ACCESS_TOKEN (here, replace YOUR_ACCESS_TOKEN with your actual token...copy and then just copy it once, and don't touch this entry again as this token is insanely long)
+- Content-Type: application/json
+
+when the entry asks the request body, tap on "File". When it asks for the file, select the dictionary we created in the section before. It should look like [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/9.jpg?raw=true)
+
+### This is (not) the end: the response
+
+WIP
