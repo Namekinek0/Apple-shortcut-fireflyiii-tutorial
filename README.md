@@ -5,7 +5,7 @@
 
 ## Prerequisites
 
-This tutorial assumes you have a working self-hosted instance of Firefly III that can be reached from the internet. If you haven't already, refer to their installation guide. I suggest [using Docker](https://docs.firefly-iii.org/how-to/firefly-iii/installation/docker/). Personal note, be careful about the password your try to input when creating the first account. It must be very long and I first thought something was wrong during the installation.
+This tutorial assumes you have a working self-hosted instance of Firefly III that can be reached from the internet. If you haven't already, refer to their installation guide. I suggest [using Docker](https://docs.firefly-iii.org/how-to/firefly-iii/installation/docker/). Personal note, be careful about the password you try to input when creating the first account. It must be very long and I first thought something was wrong during the installation.
 
 What you'll need:
 - Your API URL. The endpoint we will use consists of the URL + /api/v1/transactions. Thus, it must look something like: https://yourfireflyiiiurl.com/api/v1/transactions
