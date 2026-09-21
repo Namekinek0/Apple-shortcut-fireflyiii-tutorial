@@ -75,16 +75,16 @@ We will first focus on the body of the request. What do 'fire_webhooks' and 'app
 
 Let's create a dictionary (the first `{}` of the body) to build the body of the request. "Search Actions">Dictionary. For the first three entries, select Boolean and set the value you want. **Watch out for the transaction value**. It may look like you need a dictionary, but what you really need is an array. This is because the structure of the transactions value is not `"transaction": {}`, but rather `"transactions": [{}]`. The array is the same for the square brackets, the dictionary inside the array for the curly brackets. 
 
-Then, in the first item of the array you create a dictionary. [This](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/6.jpg?raw=true) is how the dictionary looks. Then, inside the transactions value, you must see [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/7.jpg?raw=true) after you created the first item(which, remember, must be a dictionary). It's important you read an unchangeable 'Item 1' on the left, because that means that the voice you used for the transactions value is an array. So, "Item 1" must be a dictionary, inside the dictionary every value must be text.
+Then, in the first item of the array you create a dictionary. [This](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/6.jpg?raw=true) is how the dictionary looks. Then, inside the transactions value, you must see [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/7.jpg?raw=true) after you created the first item(which, remember, must be another dictionary). It's important you read an unchangeable 'Item 1' on the left, because that means that the voice you used for the transactions value is an array. So, "Item 1" must be a dictionary, inside this every value must be text.
 
 - type: withdrawal
-- date: from the bottom bar select "Current Date". Then, click on "Current Date" and select "ISO 8601" as "Date Format." You can toggle "ISO 8601 Time" if you want(I recommend it).
+- date: from the bottom bar select "Current Date". **Important**, click on "Current Date" and select "ISO 8601" as "Date Format." You can toggle "ISO 8601 Time" if you want(I recommend it). Firefly III does not accept other formats, afaik.
 - amount: "Select variable">select 'formatted amount' or the name you have chosen for the manipulated string of the amount.
-- description: "Select variable"> select 'description' or whatever you named the text block containing the merchant value
-- source_id: 1 (this means that the money will be deducted from the first account you set up in Firefly III. You may want to change this value; to see what number you need, go to your dashboard>accounts>asset accounts>click on the account you want to take the money from and look at the number at the end of the URL)
-- destination: "Select variable"> select 'description' or whatever you named the text block containing the merchant value (or just don't use this value)
-- currency_code: EUR (of course, if you pay in US Dollars write USD etc.)
-- category_name: "Select variable"> select the variable you used to define the choice from the category list (in my case, "category")
+- description: "Select variable"> select 'description' or whatever you named the text block containing the merchant value.
+- source_id: 1 (this means that the money will be deducted from the first account you set up in Firefly III. You may want to change this value; to see what number you need, go to your dashboard>accounts>asset accounts>click on the account you want to take the money from and look at the number at the end of the URL).
+- destination: "Select variable"> select 'description' or whatever you named the text block containing the merchant value (or just don't use this value).
+- currency_code: EUR (of course, if you pay in US Dollars write USD etc.; three-letters codes only).
+- category_name: "Select variable"> select the variable you used to define the choice from the category list (in my case, "category").
 
 [This is how it should look like](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/8.jpg?raw=true) remember, all these entries must be text.
 
@@ -100,4 +100,12 @@ when the entry asks the request body, tap on "File". When it asks for the file, 
 
 ### This is (not) the end: the response
 
-WIP
+In theory, you don't need anything else; at every tap with a POS, after a while (the time apple wallet shows the notification) you'll see the list of categories. Choose one and the automation will be executed. However, looking at [the response from the API framework](https://api-docs.firefly-iii.org/#/transactions/storeTransaction), I noticed the voice "source_balance_after". The framework can tell you how much remains in your account after the purchase. This is a feature that I've found in NO bank apps but Revolut and I've always found very useful. I guess that for banks what's important is that you spend money, not that you save it. Of course, you can skip this part if you're not interested.
+
+To fetch it, first thing you must create a dictionary from the response of the API request. So "Search Actions">Get dictionary from input result. And connect the input result to the "Get contents of URL" action: like [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/10.jpg?raw=true).
+
+The voice is inside data>attributes>transactions. So then we will need to access these values first, and then the voice we're looking for. It's a [4-actions-step](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/11.jpg?raw=true).
+
+Once we have this value, we can just create a Text block and paste it on it. I personally used an If condition so that, if for some reasons the value is empty, I can read the whole response, which will probably report an error. It should look like [this](https://github.com/Namekinek0/Apple-shortcut-fireflyiii-tutorial/blob/main/img/12.jpg?raw=true).
+
+That's it, happy expense-tracking! ✨
